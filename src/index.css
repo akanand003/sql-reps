@@ -1,0 +1,9 @@
+@import "tailwindcss";
+
+@theme {
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+
+.cm-editor { height: 100%; font-size: 14px; }
+.cm-editor.cm-focused { outline: none; }
+.cm-scroller { font-family: var(--font-mono); }
