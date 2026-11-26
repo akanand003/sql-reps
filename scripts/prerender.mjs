@@ -19,32 +19,57 @@ const ssrDir = join(root, 'dist-ssr')
 const DEFAULT_SITE_URL = 'https://sql-reps.pages.dev'
 const siteUrl = (process.env.SITE_URL || DEFAULT_SITE_URL).replace(/\/$/, '')
 
-const { render, prerenderPages, headTags } = await import(join(ssrDir, 'entry-server.js'))
+const { render, prerenderPages, headTags, SHELL_META, NOT_FOUND_META } = await import(join(ssrDir, 'entry-server.js'))
 const template = readFileSync(join(dist, 'index.html'), 'utf8')
 if (!template.includes('<!--app-html-->') || !template.includes('<!--app-head-->')) {
   throw new Error('dist/index.html is missing the <!--app-head--> or <!--app-html--> markers')
 }
 
-const pages = prerenderPages()
-for (const page of pages) {
-  const html = template
-    .replace(/<!--app-head-->[\s\S]*?<!--\/app-head-->/, headTags(page, siteUrl))
-    .replace('<div id="root"><!--app-html-->', `<div id="root" data-prerendered="${page.path}">${render(page.path)}`)
-  const file = page.path === '/' ? join(dist, 'index.html') : join(dist, page.path, 'index.html')
-  mkdirSync(dirname(file), { recursive: true })
-  writeFileSync(file, html)
-  console.log(`prerendered ${page.path}`)
+/**
+ * Optional Cloudflare Web Analytics (cookieless, free). Only needed when the
+ * site is NOT using Cloudflare Pages' one-click analytics, which injects the
+ * script itself. Set CF_BEACON_TOKEN to the token from the Web Analytics
+ * dashboard. Leave it unset on Cloudflare Pages to avoid counting visits twice.
+ */
+const beaconToken = (process.env.CF_BEACON_TOKEN || '').trim()
+if (beaconToken && !/^[a-f0-9]{32}$/i.test(beaconToken)) {
+  throw new Error('CF_BEACON_TOKEN should be the 32-character token from Cloudflare Web Analytics')
+}
+const beacon = beaconToken
+  ? `<script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token":"${beaconToken}"}'></script>`
+  : ''
+
+/** Builds a full HTML page from the template. */
+function page(meta, bodyHtml, prerenderedPath) {
+  const rootOpen = prerenderedPath ? `<div id="root" data-prerendered="${prerenderedPath}">` : '<div id="root">'
+  return template
+    .replace(/<!--app-head-->[\s\S]*?<!--\/app-head-->/, headTags(meta, siteUrl))
+    .replace('<div id="root"><!--app-html-->', rootOpen + bodyHtml)
+    .replace('</body>', beacon ? `  ${beacon}\n  </body>` : '</body>')
 }
 
-// The SPA shell for client-only routes (/practice, /progress). Hosts fall back to it.
-// We keep index.html as the home page, so client-only routes need their own shell:
-const shell = template.replace(/<!--app-head-->([\s\S]*?)<!--\/app-head-->/, '$1').replace('<!--app-html-->', '')
-for (const route of ['practice', 'progress']) {
-  mkdirSync(join(dist, route), { recursive: true })
-  writeFileSync(join(dist, route, 'index.html'), shell)
+function write(relPath, html) {
+  const file = join(dist, relPath)
+  mkdirSync(dirname(file), { recursive: true })
+  writeFileSync(file, html)
 }
-// Unknown URLs get the empty shell with a 404 status; the app then renders its Not Found page.
-writeFileSync(join(dist, '404.html'), shell)
+
+const pages = prerenderPages()
+for (const p of pages) {
+  write(p.path === '/' ? 'index.html' : join(p.path, 'index.html'), page(p, render(p.path), p.path))
+  console.log(`prerendered ${p.path}`)
+}
+
+// The SPA shell for client-only routes (/practice/..., /progress). It carries
+// generic social tags (no canonical) so shared links still get a preview.
+const shell = page(SHELL_META, '', null)
+for (const route of ['practice', 'progress']) write(join(route, 'index.html'), shell)
+
+// Custom 404 page, prerendered so it shows instantly with helpful links.
+// Hosts serve it with a 404 status for unknown URLs.
+write('404.html', page(NOT_FOUND_META, render('/404'), '/404'))
+console.log('prerendered 404.html')
+if (beacon) console.log('Cloudflare Web Analytics beacon added to every page')
 
 const today = new Date().toISOString().slice(0, 10)
 const sitemap = `<?xml version="1.0" encoding="UTF-8"?>

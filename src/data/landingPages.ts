@@ -91,6 +91,7 @@ export const LANDING_PAGES: LandingPage[] = [
     cta: { practice: '/practice?topic=joins', topic: '/topics/joins', topicLabel: 'Read the JOINs guide' },
     blocks: [
       { type: 'p', text: 'Most SQL interviews for analyst, data and backend roles test the same handful of ideas. Interviewers want to see that you can filter and group data, combine tables, and handle the tricky cases like NULLs and ties. Below are the questions that come up most often, each with a short answer and a query you can run against a typical shop database.' },
+      { type: 'h2', text: 'The most common SQL interview questions' },
       { type: 'faq', items: [
         { q: 'What is the difference between WHERE and HAVING?', a: 'WHERE filters rows before they are grouped. HAVING filters groups after aggregation, so it can use functions like COUNT or SUM.', code: 'SELECT department, COUNT(*) AS headcount\nFROM employees\nWHERE salary > 70000\nGROUP BY department\nHAVING COUNT(*) >= 2;' },
         { q: 'What is the difference between INNER JOIN and LEFT JOIN?', a: 'An INNER JOIN returns only rows that match in both tables. A LEFT JOIN returns every row from the left table and fills the right side with NULL where there is no match. Use a LEFT JOIN when you must not lose rows, such as customers who have not ordered yet.' },

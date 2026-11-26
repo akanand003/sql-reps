@@ -175,6 +175,22 @@ npx wrangler pages deploy dist --project-name sql-reps
 
 Submit `https://your-domain/sitemap.xml` in Google Search Console so the topic pages get indexed.
 
+## Analytics (Cloudflare Web Analytics)
+
+Free, cookieless and privacy friendly: no cookie banner needed, no personal data stored. Single-page navigation is counted automatically.
+
+**On Cloudflare Pages (recommended, no code):** in the Cloudflare dashboard open **Workers & Pages**, pick the `sql-reps` project, go to **Metrics**, and click **Enable** under Web Analytics. Cloudflare adds the script to new deployments, so redeploy once. Visits show up under **Analytics & Logs → Web Analytics** within a few minutes.
+
+**Anywhere else (for example Vercel):** in the Cloudflare dashboard open **Analytics & Logs → Web Analytics → Add a site**, enter your domain, choose the manual JavaScript snippet, and copy the `token` value from the snippet. Set it as the build environment variable `CF_BEACON_TOKEN`. The build then adds the beacon to every page.
+
+Use one method, not both, or each visit is counted twice.
+
+## Social previews and the 404 page
+
+- Every page has Open Graph and Twitter card tags pointing to `public/og-image.png` (1200x630). The design lives in `scripts/og-image.html`. After changing it, run `npm run og-image` (needs Chrome installed) and commit the new PNG.
+- Unknown URLs get `dist/404.html`, a prerendered "0 rows returned" page with links to practice, the playground, every topic and every guide. It is marked `noindex`.
+- `robots.txt` and `sitemap.xml` are generated at build time and point at `SITE_URL`.
+
 ## Security notes
 
 - Queries run only inside the user's own browser tab, on a temporary in-memory database. They cannot touch any server or other users.

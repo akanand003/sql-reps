@@ -37,7 +37,7 @@ export default function Progress() {
               ? `You solved every free question. Nice work!${premiumCount ? ` ${premiumCount} premium questions are coming soon.` : ''}`
               : `${pct}% complete. Solve one question a day to keep your streak.`}
           </p>
-          {!allDone && <Link to={`/practice/${up.id}`} className="rounded-lg bg-emerald-600 px-4 py-2 text-sm font-semibold text-white hover:bg-emerald-700">Continue: {up.title}</Link>}
+          {!allDone && <Link to={`/practice/${up.id}`} className="rounded-lg bg-emerald-700 px-4 py-2 text-sm font-semibold text-white hover:bg-emerald-800">Continue: {up.title}</Link>}
         </div>
       </div>
 
@@ -49,7 +49,7 @@ export default function Progress() {
           return (
             <section key={t.slug} className="rounded-xl border border-slate-200 bg-white p-5">
               <div className="flex items-baseline justify-between">
-                <h2 className="font-semibold"><Link to={`/topics/${t.slug}`} className="hover:text-emerald-700">{t.name}</Link></h2>
+                <h2 className="font-semibold"><Link to={`/topics/${t.slug}`} className="inline-block py-1 hover:text-emerald-700">{t.name}</Link></h2>
                 <span className="text-sm text-slate-500">{done}/{freeQs.length}{qs.length > freeQs.length ? ` · ${qs.length - freeQs.length} 💎` : ''}</span>
               </div>
               <ul className="mt-3 flex flex-wrap gap-2">
@@ -65,7 +65,7 @@ export default function Progress() {
                   const open = isUnlocked(q, p)
                   const cls = solved
                     ? 'border-emerald-300 bg-emerald-50 text-emerald-800'
-                    : open ? 'border-slate-300 bg-white text-slate-700 hover:border-emerald-400' : 'border-slate-200 bg-slate-50 text-slate-400'
+                    : open ? 'border-slate-300 bg-white text-slate-700 hover:border-emerald-400' : 'border-slate-200 bg-slate-50 text-slate-500'
                   return (
                     <li key={q.id}>
                       {open || solved
@@ -83,7 +83,7 @@ export default function Progress() {
       {solvedCount > 0 && (
         <button
           onClick={() => { if (confirm('Reset all progress on this device? This cannot be undone.')) resetProgress() }}
-          className="mt-10 text-sm text-slate-500 underline hover:text-rose-600"
+          className="mt-10 py-1 text-sm text-slate-500 underline hover:text-rose-600"
         >
           Reset progress
         </button>

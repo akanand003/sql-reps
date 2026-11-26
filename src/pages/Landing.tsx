@@ -49,7 +49,7 @@ export default function Landing({ page }: { page: LandingPage }) {
         <h2 className="text-xl font-semibold">Ready to write some SQL?</h2>
         <p className="mt-1 text-slate-600">Free, in your browser, with instant feedback. No sign-up.</p>
         <div className="mt-5 flex flex-wrap justify-center gap-3">
-          <Link to={page.cta.practice} className="rounded-lg bg-emerald-600 px-5 py-2.5 font-semibold text-white shadow-sm transition hover:bg-emerald-700">Start practicing</Link>
+          <Link to={page.cta.practice} className="rounded-lg bg-emerald-700 px-5 py-2.5 font-semibold text-white shadow-sm transition hover:bg-emerald-800">Start practicing</Link>
           <Link to={page.cta.topic} className="rounded-lg border border-slate-300 bg-white px-5 py-2.5 font-semibold text-slate-700 transition hover:border-slate-400">{page.cta.topicLabel}</Link>
         </div>
       </section>

@@ -31,7 +31,7 @@ export default function Playground() {
         Want guided questions instead? Try the <Link to="/practice" className="font-medium text-emerald-700 underline underline-offset-2">practice questions</Link>.
       </p>
 
-      <div className="mt-6 grid gap-6 lg:grid-cols-[minmax(0,4fr)_minmax(0,8fr)]">
+      <div className="mt-6 grid grid-cols-1 gap-6 [&>*]:min-w-0 lg:grid-cols-[minmax(0,4fr)_minmax(0,8fr)]">
         <aside className="space-y-4">
           <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
             <h2 className="font-semibold">Tables</h2>
@@ -45,13 +45,13 @@ export default function Playground() {
                   >
                     {t.name}
                   </button>
-                  <span className="ml-2 text-xs text-slate-400">{t.rowCount} rows</span>
+                  <span className="ml-2 text-xs text-slate-500">{t.rowCount} rows</span>
                   <ul className="mt-1.5 space-y-0.5 border-l border-slate-200 pl-3">
                     {t.columns.map((c) => (
                       <li key={c.name} className="flex flex-wrap items-baseline gap-x-2 font-mono text-xs">
                         <span className="text-slate-800">{c.name}</span>
-                        <span className="text-slate-400">{c.type}</span>
-                        {c.note && <span className="text-slate-400">{c.note}</span>}
+                        <span className="text-slate-500">{c.type}</span>
+                        {c.note && <span className="text-slate-500">{c.note}</span>}
                       </li>
                     ))}
                   </ul>

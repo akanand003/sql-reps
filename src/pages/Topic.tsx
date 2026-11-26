@@ -29,7 +29,7 @@ function TopicView({ slug }: { slug: TopicSlug }) {
   return (
     <article className="mx-auto max-w-3xl px-4 py-12">
       <nav className="text-sm text-slate-500">
-        <Link to="/topics" className="hover:text-slate-800">Topics</Link> <span aria-hidden>/</span> {topic.name}
+        <Link to="/topics" className="inline-block py-1 hover:text-slate-800">Topics</Link> <span aria-hidden>/</span> {topic.name}
       </nav>
       <h1 className="mt-2 text-3xl font-bold tracking-tight sm:text-4xl">SQL {topic.name}, explained</h1>
       <div className="mt-4 space-y-3 text-lg leading-relaxed text-slate-700">
@@ -66,20 +66,20 @@ function TopicView({ slug }: { slug: TopicSlug }) {
                 <span className="w-5 text-center" aria-label={premium ? 'Premium' : solved ? 'Solved' : open ? 'Open' : 'Locked'}>{premium ? '💎' : solved ? '✅' : open ? '○' : '🔒'}</span>
                 {open
                   ? <Link to={`/practice/${q.id}`} className="flex-1 font-medium hover:text-emerald-700">{q.title}</Link>
-                  : <span className="flex-1 text-slate-400">{q.title}</span>}
+                  : <span className="flex-1 text-slate-500">{q.title}</span>}
                 <span className={`rounded-full px-2 py-0.5 text-xs font-medium ${difficultyClass[q.difficulty]}`}>{q.difficulty}</span>
               </li>
             )
           })}
         </ul>
-        <Link to={`/practice?topic=${topic.slug}`} className="mt-5 inline-block rounded-lg bg-emerald-600 px-5 py-2.5 font-semibold text-white transition hover:bg-emerald-700">
+        <Link to={`/practice?topic=${topic.slug}`} className="mt-5 inline-block rounded-lg bg-emerald-700 px-5 py-2.5 font-semibold text-white transition hover:bg-emerald-800">
           Practice {topic.name}
         </Link>
       </section>
 
       <nav className="mt-10 flex justify-between gap-4 text-sm">
-        {prev ? <Link to={`/topics/${prev.slug}`} className="text-slate-600 hover:text-slate-900">← {prev.name}</Link> : <span />}
-        {next && <Link to={`/topics/${next.slug}`} className="text-slate-600 hover:text-slate-900">{next.name} →</Link>}
+        {prev ? <Link to={`/topics/${prev.slug}`} className="inline-block py-2 text-slate-600 hover:text-slate-900">← {prev.name}</Link> : <span />}
+        {next && <Link to={`/topics/${next.slug}`} className="inline-block py-2 text-slate-600 hover:text-slate-900">{next.name} →</Link>}
       </nav>
     </article>
   )

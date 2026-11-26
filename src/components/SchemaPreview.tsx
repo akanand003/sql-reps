@@ -18,7 +18,7 @@ export default function SchemaPreview({ tables }: { tables: TablePreview[] | nul
             onClick={() => setActive(i)}
             className={`rounded-md border px-2.5 py-1 font-mono text-xs transition ${i === active ? 'border-emerald-600 bg-emerald-50 text-emerald-800' : 'border-slate-200 bg-white text-slate-600 hover:border-slate-300'}`}
           >
-            {tbl.name} <span className="text-slate-400">({tbl.rowCount})</span>
+            {tbl.name} <span className="text-slate-500">({tbl.rowCount})</span>
           </button>
         ))}
       </div>

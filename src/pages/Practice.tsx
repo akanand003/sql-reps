@@ -147,7 +147,7 @@ function QuestionView({ q }: { q: Question }) {
         <p className="text-4xl" aria-hidden>🔒</p>
         <h1 className="mt-3 text-xl font-semibold">This question is locked</h1>
         <p className="mt-2 text-slate-600">Solve "{prev.title}" first. Questions in a topic unlock one at a time.</p>
-        <Link to={`/practice/${prev.id}`} className="mt-6 inline-block rounded-lg bg-emerald-600 px-4 py-2 font-medium text-white hover:bg-emerald-700">Go to "{prev.title}"</Link>
+        <Link to={`/practice/${prev.id}`} className="mt-6 inline-block rounded-lg bg-emerald-700 px-4 py-2 font-medium text-white hover:bg-emerald-800">Go to "{prev.title}"</Link>
       </div>
     )
   }
@@ -161,14 +161,14 @@ function QuestionView({ q }: { q: Question }) {
         <span className="text-sm text-slate-500">Question {num} of {QUESTIONS.length}</span>
       </div>
 
-      <div className="grid gap-6 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)]">
+      <div className="grid grid-cols-1 gap-6 [&>*]:min-w-0 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)]">
         {/* Left: question */}
         <section className="space-y-4">
           <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
             <div className="flex flex-wrap items-center gap-2 text-xs">
-              <Link to={`/topics/${topic.slug}`} className="rounded-full bg-slate-100 px-2 py-0.5 font-medium text-slate-700 hover:bg-slate-200">{topic.name}</Link>
+              <Link to={`/topics/${topic.slug}`} className="rounded-full bg-slate-100 px-2.5 py-1 font-medium text-slate-700 hover:bg-slate-200">{topic.name}</Link>
               <span className={`rounded-full px-2 py-0.5 font-medium ${difficultyClass[q.difficulty]}`}>{q.difficulty}</span>
-              {solved && <span className="rounded-full bg-emerald-600 px-2 py-0.5 font-medium text-white">✓ solved</span>}
+              {solved && <span className="rounded-full bg-emerald-700 px-2 py-0.5 font-medium text-white">✓ solved</span>}
             </div>
             <h1 className="mt-3 text-xl font-semibold">{q.title}</h1>
             <p className="mt-2 leading-relaxed text-slate-700">{q.question}</p>
@@ -205,7 +205,7 @@ function QuestionView({ q }: { q: Question }) {
               <button
                 onClick={run}
                 disabled={running}
-                className="ml-auto rounded-lg bg-emerald-600 px-5 py-2 font-semibold text-white shadow-sm transition hover:bg-emerald-700 disabled:cursor-wait disabled:opacity-60"
+                className="ml-auto rounded-lg bg-emerald-700 px-5 py-2 font-semibold text-white shadow-sm transition hover:bg-emerald-800 disabled:cursor-wait disabled:opacity-60"
               >
                 {running ? 'Running…' : '▶ Run'}
               </button>
@@ -230,8 +230,8 @@ function FeedbackBanner({ feedback, next, onHint, hintShown }: { feedback: Feedb
       <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3" role="status">
         <p className="font-semibold text-emerald-800">✓ {feedback.message} {next ? 'Next question unlocked.' : 'You finished every question!'}</p>
         {next
-          ? <Link to={`/practice/${next.id}`} className="rounded-lg bg-emerald-600 px-4 py-2 text-sm font-semibold text-white hover:bg-emerald-700">Next: {next.title} →</Link>
-          : <Link to="/progress" className="rounded-lg bg-emerald-600 px-4 py-2 text-sm font-semibold text-white hover:bg-emerald-700">See your progress</Link>}
+          ? <Link to={`/practice/${next.id}`} className="rounded-lg bg-emerald-700 px-4 py-2 text-sm font-semibold text-white hover:bg-emerald-800">Next: {next.title} →</Link>
+          : <Link to="/progress" className="rounded-lg bg-emerald-700 px-4 py-2 text-sm font-semibold text-white hover:bg-emerald-800">See your progress</Link>}
       </div>
     )
   }

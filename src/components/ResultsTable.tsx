@@ -21,7 +21,7 @@ export default function ResultsTable({ result, caption }: { result: QueryResult;
               <tr key={r} className="hover:bg-slate-50">
                 {row.map((v, c) => (
                   <td key={c} className={`whitespace-nowrap px-3 py-1.5 font-mono text-xs ${typeof v === 'number' ? 'text-right tabular-nums' : ''}`}>
-                    {v === null ? <span className="italic text-slate-400">NULL</span> : String(v)}
+                    {v === null ? <span className="italic text-slate-500">NULL</span> : String(v)}
                   </td>
                 ))}
               </tr>

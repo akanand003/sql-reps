@@ -43,14 +43,14 @@ export default function Paywall({ source }: { source?: string }) {
             aria-describedby={error ? 'waitlist-error' : undefined}
             className="min-w-0 flex-1 rounded-lg border border-slate-300 px-3 py-2 focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-200"
           />
-          <button type="submit" className="rounded-lg bg-emerald-600 px-4 py-2 font-semibold text-white hover:bg-emerald-700">Join the waitlist</button>
+          <button type="submit" className="rounded-lg bg-emerald-700 px-4 py-2 font-semibold text-white hover:bg-emerald-800">Join the waitlist</button>
         </form>
       )}
       {error && <p id="waitlist-error" className="mt-2 text-sm text-rose-700">{error}</p>}
 
       <div className="mt-6 flex flex-wrap justify-center gap-x-4 gap-y-2 text-sm">
-        <Link to="/practice" className="font-medium text-emerald-700 hover:underline">Keep practicing free questions</Link>
-        <Link to="/progress" className="text-slate-600 hover:underline">See your progress</Link>
+        <Link to="/practice" className="inline-block py-1 font-medium text-emerald-700 hover:underline">Keep practicing free questions</Link>
+        <Link to="/progress" className="inline-block py-1 text-slate-600 hover:underline">See your progress</Link>
       </div>
     </div>
   )

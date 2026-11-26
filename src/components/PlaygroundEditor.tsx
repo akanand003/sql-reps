@@ -73,7 +73,7 @@ export default function PlaygroundEditor({ load }: { load: { sql: string; nonce:
           <button
             onClick={run}
             disabled={running}
-            className="ml-auto rounded-lg bg-emerald-600 px-5 py-2 font-semibold text-white shadow-sm transition hover:bg-emerald-700 disabled:cursor-wait disabled:opacity-60"
+            className="ml-auto rounded-lg bg-emerald-700 px-5 py-2 font-semibold text-white shadow-sm transition hover:bg-emerald-800 disabled:cursor-wait disabled:opacity-60"
           >
             {running ? 'Running…' : '▶ Run'}
           </button>
