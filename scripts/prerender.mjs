@@ -5,8 +5,9 @@
  * page's own <title>, meta description and canonical URL, and writes
  * dist/<path>/index.html. It also writes dist/sitemap.xml.
  *
- * Set SITE_URL (for example https://sqlreps.pages.dev) so canonical links and
- * the sitemap point at your real domain.
+ * Canonical links and the sitemap use SITE_URL if it is set, otherwise
+ * DEFAULT_SITE_URL. Host-provided URLs such as CF_PAGES_URL are ignored on
+ * purpose: they change with every deploy.
  */
 import { mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs'
 import { dirname, join } from 'node:path'
@@ -15,7 +16,8 @@ import { fileURLToPath } from 'node:url'
 const root = join(dirname(fileURLToPath(import.meta.url)), '..')
 const dist = join(root, 'dist')
 const ssrDir = join(root, 'dist-ssr')
-const siteUrl = (process.env.SITE_URL || process.env.CF_PAGES_URL || (process.env.VERCEL_PROJECT_PRODUCTION_URL && `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`) || 'https://sqlreps.pages.dev').replace(/\/$/, '')
+const DEFAULT_SITE_URL = 'https://sql-reps.pages.dev'
+const siteUrl = (process.env.SITE_URL || DEFAULT_SITE_URL).replace(/\/$/, '')
 
 const { render, prerenderPages, headTags } = await import(join(ssrDir, 'entry-server.js'))
 const template = readFileSync(join(dist, 'index.html'), 'utf8')

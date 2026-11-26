@@ -134,7 +134,7 @@ A client-side check is fine for an MVP. If you later need to protect paid conten
 
 ## Deploying for free
 
-The build output in `dist/` is plain static files. Set `SITE_URL` to your real domain so canonical links and `sitemap.xml` are correct. Cloudflare and Vercel preview URLs are picked up automatically if it is not set.
+The build output in `dist/` is plain static files. Canonical links and `sitemap.xml` use `https://sql-reps.pages.dev` by default (`DEFAULT_SITE_URL` in `scripts/prerender.mjs`). If you move to a custom domain, set the `SITE_URL` environment variable or change that default.
 
 ### Cloudflare Pages
 
