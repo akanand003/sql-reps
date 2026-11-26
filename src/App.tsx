@@ -5,6 +5,8 @@ import Home from './pages/Home'
 import Topics from './pages/Topics'
 import Topic from './pages/Topic'
 import NotFound from './pages/NotFound'
+import Landing from './pages/Landing'
+import { LANDING_PAGES } from './data/landingPages'
 
 // The practice page pulls in CodeMirror and the SQL worker, so it loads on demand.
 const Practice = lazy(() => import('./pages/Practice'))
@@ -21,6 +23,7 @@ export default function App() {
           <Route path="/practice" element={<Practice />} />
           <Route path="/practice/:id" element={<Practice />} />
           <Route path="/progress" element={<Progress />} />
+          {LANDING_PAGES.map((p) => <Route key={p.slug} path={`/${p.slug}`} element={<Landing page={p} />} />)}
           <Route path="*" element={<NotFound />} />
         </Routes>
       </Suspense>
