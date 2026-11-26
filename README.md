@@ -128,6 +128,28 @@ It fails if:
 
 The topic page, sitemap entry and prerendered HTML are created automatically.
 
+## Guided lessons (pilot)
+
+Short "teach then do" lessons live in `src/data/lessons.json`. There's one per topic, currently for SELECT and WHERE only, at `/lessons/select` and `/lessons/where`. Each lesson has 4 to 5 steps:
+
+| Field | What it is |
+| --- | --- |
+| `explain` | One sentence that teaches one idea |
+| `example` | A worked example query |
+| `task` | A tiny task the learner solves in the editor |
+| `hint` | Shown when the learner asks |
+| `solution` | The answer. The learner's result is compared with it, using the same rules as practice questions (`orderMatters` and `ignoreColumnOrder` work here too) |
+
+A lesson lists the sample `tables` it needs, such as `["customers", "products"]`. Progress (current step, solved and skipped steps) is saved in the browser only. Lessons are not in the sitemap while they are a pilot. A topic page shows "Start the lesson" when a lesson exists for it.
+
+Check lessons with:
+
+```bash
+npm run check:lessons
+```
+
+It fails if a step is missing a field, the example or solution doesn't run, or running the example would pass the task.
+
 ## Premium questions and the waitlist
 
 All access decisions go through `src/lib/access.ts`:

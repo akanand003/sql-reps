@@ -10,7 +10,8 @@
     "check:questions": "node scripts/check-questions.ts",
     "typecheck": "tsc -b",
     "og-image": "node scripts/generate-og-image.mjs",
-    "preview:cf": "wrangler pages dev dist --kv WAITLIST --port 8788"
+    "preview:cf": "wrangler pages dev dist --kv WAITLIST --port 8788",
+    "check:lessons": "node scripts/check-lessons.ts"
   },
   "dependencies": {
     "@codemirror/lang-sql": "^6.10.0",

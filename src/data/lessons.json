@@ -1,0 +1,101 @@
+{
+  "version": 1,
+  "lessons": [
+    {
+      "topic": "select",
+      "title": "SELECT: read data from a table",
+      "intro": "Five tiny steps. Each one teaches one idea, shows an example, then asks you to try it.",
+      "tables": ["customers", "products"],
+      "steps": [
+        {
+          "id": "select-star",
+          "explain": "SELECT * FROM a table returns every column and every row.",
+          "example": "SELECT * FROM customers;",
+          "task": "Show every column and row of the products table.",
+          "hint": "Swap customers for products in the example.",
+          "solution": "SELECT * FROM products;"
+        },
+        {
+          "id": "select-one-column",
+          "explain": "Put a column name after SELECT to get only that column.",
+          "example": "SELECT city FROM customers;",
+          "task": "Show only the name column from products.",
+          "hint": "SELECT name FROM products;",
+          "solution": "SELECT name FROM products;"
+        },
+        {
+          "id": "select-column-order",
+          "explain": "List several columns with commas, and they come back in the order you write them.",
+          "example": "SELECT country, name FROM customers;",
+          "task": "From products, show price first and then name.",
+          "hint": "SELECT price, name FROM ...",
+          "solution": "SELECT price, name FROM products;"
+        },
+        {
+          "id": "select-calculate",
+          "explain": "You can do maths on a column and name the result with AS.",
+          "example": "SELECT name, price * 2 AS double_price FROM products;",
+          "task": "Show each product's name and its price plus 10, in a column called new_price.",
+          "hint": "price + 10 AS new_price",
+          "solution": "SELECT name, price + 10 AS new_price FROM products;"
+        },
+        {
+          "id": "select-distinct",
+          "explain": "SELECT DISTINCT removes duplicate rows, so each value appears once.",
+          "example": "SELECT DISTINCT country FROM customers;",
+          "task": "Show each product category once.",
+          "hint": "SELECT DISTINCT category FROM products;",
+          "solution": "SELECT DISTINCT category FROM products;"
+        }
+      ]
+    },
+    {
+      "topic": "where",
+      "title": "WHERE: keep only the rows you need",
+      "intro": "Five tiny steps. Each one teaches one idea, shows an example, then asks you to try it.",
+      "tables": ["customers", "products"],
+      "steps": [
+        {
+          "id": "where-text",
+          "explain": "WHERE keeps only the rows where a condition is true, and text goes in single quotes.",
+          "example": "SELECT name FROM products WHERE category = 'Furniture';",
+          "task": "Show the names of products in the Stationery category.",
+          "hint": "WHERE category = 'Stationery'",
+          "solution": "SELECT name FROM products WHERE category = 'Stationery';"
+        },
+        {
+          "id": "where-number",
+          "explain": "Numbers need no quotes, and you can compare them with <, >, <= and >=.",
+          "example": "SELECT name, price FROM products WHERE price < 20;",
+          "task": "Show the name and price of products that cost more than 100.",
+          "hint": "WHERE price > 100",
+          "solution": "SELECT name, price FROM products WHERE price > 100;"
+        },
+        {
+          "id": "where-and",
+          "explain": "AND joins two conditions, and a row stays only if both are true.",
+          "example": "SELECT name FROM products WHERE category = 'Electronics' AND price < 50;",
+          "task": "Show the names of Furniture products that cost less than 100.",
+          "hint": "category = 'Furniture' AND price < 100",
+          "solution": "SELECT name FROM products WHERE category = 'Furniture' AND price < 100;"
+        },
+        {
+          "id": "where-in",
+          "explain": "IN checks whether a value matches any item in a list.",
+          "example": "SELECT name FROM customers WHERE country IN ('UK', 'USA');",
+          "task": "Show the names of products in the Electronics or Stationery category.",
+          "hint": "WHERE category IN ('Electronics', 'Stationery')",
+          "solution": "SELECT name FROM products WHERE category IN ('Electronics', 'Stationery');"
+        },
+        {
+          "id": "where-null",
+          "explain": "A missing value is NULL, and you test for it with IS NULL or IS NOT NULL, never with =.",
+          "example": "SELECT name FROM customers WHERE email IS NULL;",
+          "task": "Show the names of customers who do have an email address.",
+          "hint": "WHERE email IS NOT NULL",
+          "solution": "SELECT name FROM customers WHERE email IS NOT NULL;"
+        }
+      ]
+    }
+  ]
+}

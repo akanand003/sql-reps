@@ -69,3 +69,10 @@ const names = [...TABLE_ORDER.filter((n) => collected.has(n)), ...[...collected.
 export const SAMPLE_TABLES: SampleTable[] = names.map((n) => describe(n, collected.get(n)!))
 
 export const SAMPLE_SETUP_SQL: string = names.map((n) => collected.get(n)!.join('\n')).join('\n')
+
+/** Setup SQL for just the named tables, in the standard order. Used by lessons. */
+export function setupSqlForTables(tables: string[]): string {
+  const missing = tables.filter((t) => !collected.has(t))
+  if (missing.length) throw new Error(`Unknown sample table(s): ${missing.join(', ')}`)
+  return names.filter((n) => tables.includes(n)).map((n) => collected.get(n)!.join('\n')).join('\n')
+}

@@ -4,6 +4,7 @@ import { StaticRouter } from 'react-router'
 import App from './App'
 
 export { prerenderPages, headTags, SHELL_META, NOT_FOUND_META } from './lib/seo'
+export { LESSONS } from './data/lessons'
 
 /** Renders a route to HTML. Used only by scripts/prerender.mjs at build time. */
 export function render(url: string): string {

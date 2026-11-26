@@ -24,7 +24,7 @@ const ssrDir = join(root, 'dist-ssr')
 const DEFAULT_SITE_URL = 'https://sql-reps.pages.dev'
 const siteUrl = (process.env.SITE_URL || DEFAULT_SITE_URL).replace(/\/$/, '')
 
-const { render, prerenderPages, headTags, SHELL_META, NOT_FOUND_META } = await import(join(ssrDir, 'entry-server.js'))
+const { render, prerenderPages, headTags, SHELL_META, NOT_FOUND_META, LESSONS } = await import(join(ssrDir, 'entry-server.js'))
 const template = readFileSync(join(dist, 'index.html'), 'utf8')
 if (!template.includes('<!--app-html-->') || !template.includes('<!--app-head-->')) {
   throw new Error('dist/index.html is missing the <!--app-head--> or <!--app-html--> markers')
@@ -71,6 +71,8 @@ const shell = page(SHELL_META, '', null)
 // practice.html also serves every /practice/<id> URL through the rewrite in
 // public/_redirects (Cloudflare) or vercel.json (Vercel).
 for (const route of ['practice', 'progress']) write(`${route}.html`, shell)
+// Guided lessons are client-only too (not in the sitemap while they are a pilot).
+for (const lesson of LESSONS) write(`lessons/${lesson.topic}.html`, shell)
 
 // Custom 404 page, prerendered so it shows instantly with helpful links.
 // Hosts serve it with a 404 status for unknown URLs.

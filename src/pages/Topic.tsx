@@ -3,6 +3,7 @@ import { TOPICS, TOPIC_BY_SLUG, type TopicSlug } from '../data/topics'
 import { questionsForTopic } from '../data/questions'
 import { isUnlocked, useProgress } from '../lib/progress'
 import { isPremium } from '../lib/access'
+import { LESSON_BY_TOPIC, lessonPath } from '../data/lessons'
 import { topicMeta, useMeta } from '../lib/seo'
 import CodeBlock from '../components/CodeBlock'
 import NotFound from './NotFound'
@@ -72,9 +73,16 @@ function TopicView({ slug }: { slug: TopicSlug }) {
             )
           })}
         </ul>
-        <Link to={`/practice?topic=${topic.slug}`} className="mt-5 inline-block rounded-lg bg-emerald-700 px-5 py-2.5 font-semibold text-white transition hover:bg-emerald-800">
-          Practice {topic.name}
-        </Link>
+        <div className="mt-5 flex flex-wrap gap-3">
+          {LESSON_BY_TOPIC.has(topic.slug) && (
+            <Link to={lessonPath(topic.slug)} className="inline-block rounded-lg border-2 border-emerald-700 bg-white px-5 py-2 font-semibold text-emerald-800 transition hover:bg-emerald-50">
+              Start the lesson
+            </Link>
+          )}
+          <Link to={`/practice?topic=${topic.slug}`} className="inline-block rounded-lg bg-emerald-700 px-5 py-2.5 font-semibold text-white transition hover:bg-emerald-800">
+            Practice {topic.name}
+          </Link>
+        </div>
       </section>
 
       <nav className="mt-10 flex justify-between gap-4 text-sm">
