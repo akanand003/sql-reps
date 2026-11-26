@@ -6,6 +6,7 @@ import Topics from './pages/Topics'
 import Topic from './pages/Topic'
 import NotFound from './pages/NotFound'
 import Landing from './pages/Landing'
+import Playground from './pages/Playground'
 import { LANDING_PAGES } from './data/landingPages'
 
 // The practice page pulls in CodeMirror and the SQL worker, so it loads on demand.
@@ -23,6 +24,7 @@ export default function App() {
           <Route path="/practice" element={<Practice />} />
           <Route path="/practice/:id" element={<Practice />} />
           <Route path="/progress" element={<Progress />} />
+          <Route path="/sql-playground" element={<Playground />} />
           {LANDING_PAGES.map((p) => <Route key={p.slug} path={`/${p.slug}`} element={<Landing page={p} />} />)}
           <Route path="*" element={<NotFound />} />
         </Routes>

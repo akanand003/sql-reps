@@ -26,6 +26,12 @@ export const TOPICS_META: PageMeta = {
   path: '/topics',
 }
 
+export const PLAYGROUND_META: PageMeta = {
+  title: 'SQL Playground: Run SQL Queries Online Free | SQL Reps',
+  description: 'Free online SQL playground. Write any SELECT query against sample customers, orders, products and employees tables and see results instantly. No sign-up.',
+  path: '/sql-playground',
+}
+
 export function topicMeta(slug: TopicSlug): PageMeta {
   const t = TOPIC_BY_SLUG.get(slug)!
   return { title: t.seoTitle, description: t.seoDescription, path: `/topics/${t.slug}` }
@@ -77,7 +83,7 @@ export function landingMeta(page: LandingPage): PageMeta {
 
 /** Every page that is prerendered to static HTML at build time. */
 export function prerenderPages(): PageMeta[] {
-  return [HOME_META, TOPICS_META, ...TOPICS.map((t) => topicMeta(t.slug)), ...LANDING_PAGES.map(landingMeta)]
+  return [HOME_META, TOPICS_META, PLAYGROUND_META, ...TOPICS.map((t) => topicMeta(t.slug)), ...LANDING_PAGES.map(landingMeta)]
 }
 
 export function escapeHtml(s: string): string {

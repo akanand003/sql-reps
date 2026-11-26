@@ -5,7 +5,7 @@ import { TOPICS } from '../data/topics'
 import { LANDING_PAGES } from '../data/landingPages'
 
 const navClass = ({ isActive }: { isActive: boolean }) =>
-  `rounded-md px-3 py-1.5 text-sm font-medium transition ${isActive ? 'bg-emerald-50 text-emerald-700' : 'text-slate-600 hover:text-slate-900'}`
+  `rounded-md px-2 py-1.5 text-sm sm:px-3 font-medium transition ${isActive ? 'bg-emerald-50 text-emerald-700' : 'text-slate-600 hover:text-slate-900'}`
 
 export default function Layout({ children }: { children: ReactNode }) {
   const progress = useProgress()
@@ -16,11 +16,12 @@ export default function Layout({ children }: { children: ReactNode }) {
         <div className="mx-auto flex h-14 max-w-6xl items-center gap-2 px-4">
           <Link to="/" className="mr-auto flex items-center gap-2 font-semibold tracking-tight">
             <span className="grid h-7 w-7 place-items-center rounded-lg bg-emerald-600 font-mono text-[10px] font-bold text-white">SQL</span>
-            <span>SQL Reps</span>
+            <span className="hidden min-[440px]:inline">SQL Reps</span>
           </Link>
           <nav className="flex items-center gap-1">
             <NavLink to="/topics" className={navClass}>Topics</NavLink>
             <NavLink to="/practice" className={navClass}>Practice</NavLink>
+            <NavLink to="/sql-playground" className={navClass}>Playground</NavLink>
             <NavLink to="/progress" className={navClass}>
               <span className="hidden sm:inline">Progress</span>
               <span className="sm:hidden" aria-label="Progress">📈</span>
@@ -37,6 +38,7 @@ export default function Layout({ children }: { children: ReactNode }) {
             <p className="mt-2 text-slate-500">Every query runs in your browser. Nothing is sent to a server.</p>
             <ul className="mt-3 space-y-1.5">
               <li><Link to="/practice" className="text-slate-600 hover:text-slate-900">Practice</Link></li>
+              <li><Link to="/sql-playground" className="text-slate-600 hover:text-slate-900">SQL playground</Link></li>
               <li><Link to="/progress" className="text-slate-600 hover:text-slate-900">Your progress</Link></li>
             </ul>
           </div>
