@@ -192,7 +192,7 @@ The build output in `dist/` is plain static files. Canonical links and `sitemap.
    - Build command: `npm run build`
    - Build output directory: `dist`
    - Environment variables: `SITE_URL` = `https://your-domain`, and `NODE_VERSION` = `22`
-4. Deploy. `public/_redirects` sends every `/practice/...` URL to the app shell. Unknown URLs get `404.html`.
+4. Deploy. Pages are built as flat files (`topics/joins.html`), which Cloudflare serves at `/topics/joins` with no redirect. `public/_redirects` sends every `/practice/...` URL to the app shell (`practice.html`). Unknown URLs get `404.html`.
 
 Or from your machine, without Git:
 
@@ -206,7 +206,7 @@ npx wrangler pages deploy dist --project-name sql-reps
 1. Push the project to GitHub and import it at vercel.com/new.
 2. Vercel detects Vite. Keep the build command `npm run build` and the output directory `dist`.
 3. Add the environment variable `SITE_URL` = `https://your-domain`.
-4. Deploy. `vercel.json` sends every `/practice/...` URL to the app shell.
+4. Deploy. `vercel.json` turns on clean URLs (so `topics/joins.html` is served at `/topics/joins`) and sends every `/practice/...` URL to the app shell.
 
 ### After deploying
 

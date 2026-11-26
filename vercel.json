@@ -1,3 +1,5 @@
 {
-  "rewrites": [{ "source": "/practice/:path*", "destination": "/practice/index.html" }]
+  "cleanUrls": true,
+  "trailingSlash": false,
+  "rewrites": [{ "source": "/practice/:path*", "destination": "/practice" }]
 }

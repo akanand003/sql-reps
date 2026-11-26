@@ -3,7 +3,12 @@
  *
  * For every page in prerenderPages() it renders the React tree to HTML, injects the
  * page's own <title>, meta description and canonical URL, and writes
- * dist/<path>/index.html. It also writes dist/sitemap.xml.
+ * dist/<path>.html (for example dist/topics/joins.html). It also writes
+ * dist/sitemap.xml.
+ *
+ * Flat .html files (not <path>/index.html folders) matter on Cloudflare Pages:
+ * it serves topics/joins.html at /topics/joins with no redirect, so the URL
+ * matches our links, canonical tags and sitemap exactly.
  *
  * Canonical links and the sitemap use SITE_URL if it is set, otherwise
  * DEFAULT_SITE_URL. Host-provided URLs such as CF_PAGES_URL are ignored on
@@ -56,14 +61,16 @@ function write(relPath, html) {
 
 const pages = prerenderPages()
 for (const p of pages) {
-  write(p.path === '/' ? 'index.html' : join(p.path, 'index.html'), page(p, render(p.path), p.path))
+  write(p.path === '/' ? 'index.html' : `${p.path.slice(1)}.html`, page(p, render(p.path), p.path))
   console.log(`prerendered ${p.path}`)
 }
 
 // The SPA shell for client-only routes (/practice/..., /progress). It carries
 // generic social tags (no canonical) so shared links still get a preview.
 const shell = page(SHELL_META, '', null)
-for (const route of ['practice', 'progress']) write(join(route, 'index.html'), shell)
+// practice.html also serves every /practice/<id> URL through the rewrite in
+// public/_redirects (Cloudflare) or vercel.json (Vercel).
+for (const route of ['practice', 'progress']) write(`${route}.html`, shell)
 
 // Custom 404 page, prerendered so it shows instantly with helpful links.
 // Hosts serve it with a 404 status for unknown URLs.
