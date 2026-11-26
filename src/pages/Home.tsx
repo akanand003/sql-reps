@@ -1,6 +1,7 @@
 import { Link } from 'react-router'
 import { TOPICS } from '../data/topics'
 import { QUESTIONS, questionsForTopic } from '../data/questions'
+import { FREE_QUESTION_LIMIT } from '../lib/access'
 import { HOME_META, useMeta } from '../lib/seo'
 import CodeBlock from '../components/CodeBlock'
 
@@ -14,7 +15,7 @@ export default function Home() {
             <p className="mb-3 inline-block rounded-full bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-700">Free · No sign-up · Runs in your browser</p>
             <h1 className="text-4xl font-bold tracking-tight text-slate-900 sm:text-5xl">Learn SQL one rep at a time.</h1>
             <p className="mt-4 max-w-md text-lg text-slate-600">
-              Write real queries against real business data and get instant feedback. {QUESTIONS.length} bite-sized questions, from your first SELECT to window functions.
+              Write real queries against real business data and get instant feedback. {QUESTIONS.length} bite-sized questions ({FREE_QUESTION_LIMIT} of them free), from your first SELECT to window functions.
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
               <Link to="/practice" className="rounded-lg bg-emerald-600 px-5 py-3 font-semibold text-white shadow-sm transition hover:bg-emerald-700">Start practicing</Link>

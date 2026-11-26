@@ -2,6 +2,7 @@ import { Link, useParams } from 'react-router'
 import { TOPICS, TOPIC_BY_SLUG, type TopicSlug } from '../data/topics'
 import { questionsForTopic } from '../data/questions'
 import { isUnlocked, useProgress } from '../lib/progress'
+import { isPremium } from '../lib/access'
 import { topicMeta, useMeta } from '../lib/seo'
 import CodeBlock from '../components/CodeBlock'
 import NotFound from './NotFound'
@@ -20,6 +21,7 @@ function TopicView({ slug }: { slug: TopicSlug }) {
   useMeta(topicMeta(slug))
   const progress = useProgress()
   const questions = questionsForTopic(slug)
+  const freeCount = questions.filter((q) => !isPremium(q)).length
   const index = TOPICS.indexOf(topic)
   const prev = TOPICS[index - 1]
   const next = TOPICS[index + 1]
@@ -51,14 +53,17 @@ function TopicView({ slug }: { slug: TopicSlug }) {
 
       <section className="mt-10 rounded-2xl border border-slate-200 bg-white p-6">
         <h2 className="text-xl font-semibold">Practice {topic.name}</h2>
-        <p className="mt-1 text-slate-600">{questions.length} questions, easiest first. Your progress is saved on this device.</p>
+        <p className="mt-1 text-slate-600">
+          {freeCount} free questions{questions.length > freeCount ? `, plus ${questions.length - freeCount} premium coming soon` : ''}. Your progress is saved on this device.
+        </p>
         <ul className="mt-4 divide-y divide-slate-100">
           {questions.map((q) => {
             const solved = !!progress.solved[q.id]
-            const open = isUnlocked(q, progress)
+            const premium = isPremium(q)
+            const open = premium || isUnlocked(q, progress)
             return (
               <li key={q.id} className="flex items-center gap-3 py-2.5">
-                <span className="w-5 text-center" aria-label={solved ? 'Solved' : open ? 'Open' : 'Locked'}>{solved ? '✅' : open ? '○' : '🔒'}</span>
+                <span className="w-5 text-center" aria-label={premium ? 'Premium' : solved ? 'Solved' : open ? 'Open' : 'Locked'}>{premium ? '💎' : solved ? '✅' : open ? '○' : '🔒'}</span>
                 {open
                   ? <Link to={`/practice/${q.id}`} className="flex-1 font-medium hover:text-emerald-700">{q.title}</Link>
                   : <span className="flex-1 text-slate-400">{q.title}</span>}

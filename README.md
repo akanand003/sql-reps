@@ -101,7 +101,9 @@ Open `src/data/questions.json` and add an object to the `questions` array:
 | `ignoreColumnOrder` | no | `true` to accept the right columns in any order |
 | `premium` | no | `true` to put the question behind the paywall later |
 
-Questions appear grouped by topic in the order of `topics.ts`, and in file order within a topic. The first question of each topic is always open. The others unlock when the previous one in the same topic is solved.
+Questions appear in file order, and that order sets their numbers. Questions 1 to 30 are the free path through all topics. Questions 31 to 100 are premium and go from easy to medium to hard. Add new questions at the end, so existing numbers (and what is free) do not shift.
+
+The first question of each topic is always open. The others unlock when the previous one in the same topic is solved.
 
 Then check your work:
 
@@ -109,7 +111,12 @@ Then check your work:
 npm run check:questions
 ```
 
-It fails if a field is missing, an id is duplicated, the setup or solution does not run, the solution returns no rows, or `orderMatters` is set without an `ORDER BY`.
+It fails if:
+
+- a field is missing, an id is duplicated, or the setup or solution does not run
+- the solution returns no rows, or `orderMatters` is set without an `ORDER BY`
+- the expected answer is ambiguous: ties under `ORDER BY`, or a `LIMIT` that could pick different rows (found by re-running the solution with a random tie-breaker and with reversed scan order)
+- premium questions are not ordered easy, then medium, then hard
 
 **Tips for good questions:** keep tables small (5 to 15 rows) so learners can check results by eye. Avoid ties when order matters. Make sure a plausible wrong answer gives a different result from the right one.
 
@@ -121,14 +128,17 @@ It fails if a field is missing, an id is duplicated, the setup or solution does 
 
 The topic page, sitemap entry and prerendered HTML are created automatically.
 
-## Adding a paywall later
+## Premium questions and the waitlist
 
 All access decisions go through `src/lib/access.ts`:
 
-- `FREE_QUESTION_LIMIT` (30) is how many questions are free.
-- `getPlan()` returns `'free'` today. Connect it to your auth or billing provider.
-- `canAccess(question, number)` is checked on the Practice page. When it returns `false`, `<Paywall />` is shown instead. Change that component to link to your checkout page.
-- Mark individual questions as paid with `"premium": true`.
+- `FREE_QUESTION_LIMIT` (30): questions 1 to 30 are free, and everything after is premium. You can also force a single question to be premium with `"premium": true`.
+- `isPremium(question)` and `canAccess(question)` are used on the Practice page, topic pages, the progress page and the question picker.
+- `getPlan()` returns `'free'` today. When paid plans launch, connect it to your auth or billing provider.
+
+There is no payment system. Opening a premium question shows `<Paywall />` with "Premium questions are coming soon, join the waitlist" and an email box. `src/lib/waitlist.ts` saves emails in the visitor's own `localStorage` (key `sqlreps:waitlist:v1`).
+
+**Important:** because the emails stay in each visitor's browser, you cannot see them yet. To actually collect them, replace `joinWaitlist()` with a call to a form endpoint, for example a free tier of a form service or your own API.
 
 A client-side check is fine for an MVP. If you later need to protect paid content properly, serve premium questions from an API that checks the user's plan, rather than shipping them in `questions.json`.
 

@@ -1,5 +1,5 @@
 import raw from './questions.json'
-import { TOPICS, type TopicSlug } from './topics'
+import type { TopicSlug } from './topics'
 
 export type Difficulty = 'easy' | 'medium' | 'hard'
 
@@ -18,17 +18,15 @@ export interface Question {
   orderMatters?: boolean
   /** Columns may come back in any order. */
   ignoreColumnOrder?: boolean
-  /** Reserved for the paywall. See src/lib/access.ts. */
+  /** Force a question to be premium even inside the free range. See src/lib/access.ts. */
   premium?: boolean
 }
 
-const topicOrder = TOPICS.map((t) => t.slug)
-
-/** All questions, ordered by topic (as listed in topics.ts) and then by their order in the JSON file. */
-export const QUESTIONS: Question[] = (raw.questions as Question[])
-  .map((q, i) => ({ q, i }))
-  .sort((a, b) => topicOrder.indexOf(a.q.topic) - topicOrder.indexOf(b.q.topic) || a.i - b.i)
-  .map(({ q }) => q)
+/**
+ * All questions in file order. The order is the learning path and also sets the
+ * question numbers: 1 to 30 are free, 31 onwards are premium (see lib/access.ts).
+ */
+export const QUESTIONS: Question[] = raw.questions as Question[]
 
 export const QUESTION_BY_ID = new Map(QUESTIONS.map((q) => [q.id, q]))
 

@@ -1,12 +1,14 @@
-import type { Question } from '../data/questions'
+import { questionNumber, type Question } from '../data/questions'
 
 /**
  * Single place that decides who can open which question.
  *
- * Today everything is free. To add a paywall later:
- *   1. mark questions with "premium": true in questions.json (or rely on FREE_QUESTION_LIMIT),
- *   2. make getPlan() read the real plan (for example from your auth or billing provider),
- *   3. the Practice page already shows <Paywall /> whenever canAccess() returns false.
+ * Questions 1 to FREE_QUESTION_LIMIT are free. Everything after that is premium,
+ * as is any question marked "premium": true in questions.json.
+ *
+ * There is no payment system yet: premium questions show <Paywall />, which
+ * collects waitlist emails (see lib/waitlist.ts). When paid plans launch, make
+ * getPlan() return the user's real plan from your auth or billing provider.
  */
 export const FREE_QUESTION_LIMIT = 30
 
@@ -16,7 +18,10 @@ export function getPlan(): Plan {
   return 'free'
 }
 
-export function canAccess(q: Question, questionNumber: number, plan: Plan = getPlan()): boolean {
-  if (plan === 'pro') return true
-  return !q.premium && questionNumber <= FREE_QUESTION_LIMIT
+export function isPremium(q: Question): boolean {
+  return !!q.premium || questionNumber(q) > FREE_QUESTION_LIMIT
+}
+
+export function canAccess(q: Question, plan: Plan = getPlan()): boolean {
+  return plan === 'pro' || !isPremium(q)
 }

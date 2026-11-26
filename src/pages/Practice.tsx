@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Link, Navigate, useNavigate, useParams, useSearchParams } from 'react-router'
 import { QUESTIONS, QUESTION_BY_ID, nextQuestion, questionNumber, setupSqlOf, type Question } from '../data/questions'
 import { TOPICS, TOPIC_BY_SLUG, type TopicSlug } from '../data/topics'
-import { canAccess } from '../lib/access'
+import { canAccess, isPremium } from '../lib/access'
 import { checkAnswer } from '../lib/checkAnswer'
 import { isUnlocked, nextUp, recordAttempt, recordSolved, saveDraft, useProgress } from '../lib/progress'
 import { useMeta } from '../lib/seo'
@@ -126,7 +126,18 @@ function QuestionView({ q }: { q: Question }) {
     }
   }, [running, q, setupSql])
 
-  if (!canAccess(q, num)) return <div className="px-4 py-16"><Paywall /></div>
+  if (!canAccess(q)) {
+    const t = TOPIC_BY_SLUG.get(q.topic)!
+    return (
+      <div className="px-4 py-12">
+        <p className="mb-4 text-center text-sm text-slate-500">
+          Question {num} of {QUESTIONS.length} · <Link to={`/topics/${t.slug}`} className="hover:underline">{t.name}</Link> · {q.difficulty}
+        </p>
+        <h1 className="mb-6 text-center text-2xl font-bold">{q.title}</h1>
+        <Paywall source={q.id} />
+      </div>
+    )
+  }
 
   if (!unlocked) {
     const list = QUESTIONS.filter((x) => x.topic === q.topic)
@@ -249,10 +260,11 @@ function QuestionPicker({ current, onPick }: { current: Question; onPick: (id: s
         {TOPICS.map((t) => (
           <optgroup key={t.slug} label={t.name}>
             {QUESTIONS.filter((q) => q.topic === t.slug).map((q) => {
-              const open = isUnlocked(q, progress)
+              const premium = isPremium(q)
+              const open = premium || isUnlocked(q, progress)
               return (
                 <option key={q.id} value={q.id} disabled={!open}>
-                  {progress.solved[q.id] ? '✓ ' : open ? '' : '🔒 '}{questionNumber(q)}. {q.title}
+                  {premium ? '💎 ' : progress.solved[q.id] ? '✓ ' : open ? '' : '🔒 '}{questionNumber(q)}. {q.title}
                 </option>
               )
             })}
