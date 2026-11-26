@@ -133,8 +133,8 @@ function QuestionView({ q }: { q: Question }) {
         <p className="mb-4 text-center text-sm text-slate-500">
           Question {num} of {QUESTIONS.length} · <Link to={`/topics/${t.slug}`} className="hover:underline">{t.name}</Link> · {q.difficulty}
         </p>
-        <h1 className="mb-6 text-center text-2xl font-bold">{q.title}</h1>
-        <Paywall source={q.id} />
+        <h1 className="mb-6 text-center text-2xl font-bold">Premium question</h1>
+        <Paywall />
       </div>
     )
   }

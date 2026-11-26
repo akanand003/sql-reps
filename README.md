@@ -136,9 +136,46 @@ All access decisions go through `src/lib/access.ts`:
 - `isPremium(question)` and `canAccess(question)` are used on the Practice page, topic pages, the progress page and the question picker.
 - `getPlan()` returns `'free'` today. When paid plans launch, connect it to your auth or billing provider.
 
-There is no payment system. Opening a premium question shows `<Paywall />` with "Premium questions are coming soon, join the waitlist" and an email box. `src/lib/waitlist.ts` saves emails in the visitor's own `localStorage` (key `sqlreps:waitlist:v1`).
+There is no payment system. Opening a premium question shows `<Paywall />` with "Premium questions are coming soon, join the waitlist" and an email box.
 
-**Important:** because the emails stay in each visitor's browser, you cannot see them yet. To actually collect them, replace `joinWaitlist()` with a call to a form endpoint, for example a free tier of a form service or your own API.
+### How the waitlist saves emails
+
+The form posts to a Cloudflare Pages Function, `functions/api/waitlist.ts`, which stores each email in Cloudflare KV (free tier). It:
+
+- stores only the email (as the key `email:<address>`, lowercased) and the time it joined
+- validates the format, and does not store the same email twice
+- ignores bots that fill a hidden honeypot field
+- allows 5 submits per visitor per minute. A one-way hash of the visitor's IP is kept for 2 minutes for this. The IP itself is never stored.
+- refuses requests from other websites, and always answers with a clear JSON message
+
+The browser only remembers that the visitor joined, not their email. The waitlist needs Cloudflare Pages: on other hosts the form shows "not available right now".
+
+### Set up the KV store (one time)
+
+1. In the Cloudflare dashboard, go to **Storage & Databases → KV** (in older dashboards: **Workers & Pages → KV**) and click **Create** (or **Create namespace**). Name it `sql-reps-waitlist`.
+2. Open **Workers & Pages**, pick the `sql-reps` project, then **Settings → Bindings** (older dashboards: **Settings → Functions → KV namespace bindings**). Click **Add → KV namespace**.
+3. Set **Variable name** to `WAITLIST` and choose the `sql-reps-waitlist` namespace. Save. Do this for **Production**, and for **Preview** too if you want preview deployments to work.
+4. Redeploy (**Deployments → ⋯ → Retry deployment**). Bindings only apply to new deployments.
+
+Until the binding exists, the form says "The waitlist is not open yet".
+
+### See the saved emails
+
+- **Dashboard:** **Storage & Databases → KV → sql-reps-waitlist → KV Pairs**. Each `email:...` key is one signup, and its value is the join time. Ignore `ratelimit:...` keys: they delete themselves within 2 minutes.
+- **Command line:** run `npx wrangler login` once, then `npx wrangler kv key list --namespace-id <namespace id> --remote`. The namespace id is shown on the KV page.
+
+The free KV tier allows 1,000 writes per day. Each submit uses one or two writes, which is plenty for a waitlist.
+
+### Test the waitlist locally
+
+```bash
+npm run build
+```
+```bash
+npm run preview:cf
+```
+
+This runs the site and the function on http://localhost:8788 with a local, simulated KV store. `npm run dev` has no functions, so the form shows "not available right now" there.
 
 A client-side check is fine for an MVP. If you later need to protect paid content properly, serve premium questions from an API that checks the user's plan, rather than shipping them in `questions.json`.
 

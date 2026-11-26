@@ -7,7 +7,7 @@ import { questionNumber, type Question } from '../data/questions'
  * as is any question marked "premium": true in questions.json.
  *
  * There is no payment system yet: premium questions show <Paywall />, which
- * collects waitlist emails (see lib/waitlist.ts). When paid plans launch, make
+ * adds emails to the waitlist (lib/waitlist.ts -> functions/api/waitlist.ts). When paid plans launch, make
  * getPlan() return the user's real plan from your auth or billing provider.
  */
 export const FREE_QUESTION_LIMIT = 30
